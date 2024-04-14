@@ -1,0 +1,23 @@
+.nav{
+    margin-top: 0;
+    position: fixed;
+    height: 40px;
+    width: 60%;
+    padding: 6px;
+    background-color: darkcyan;
+    display: flex;
+    justify-content: flex-end;
+    
+    .nav-item{
+        font-weight: 600;
+        padding: 5px 10px;
+        margin-left: 10px;
+        text-indent: 0;
+        list-style-type: none;
+
+        &a{
+            text-decoration: none;
+            color: white;
+        }
+    }
+}

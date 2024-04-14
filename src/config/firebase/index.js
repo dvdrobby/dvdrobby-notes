@@ -1,20 +1,21 @@
 import { initializeApp } from "firebase/app";
-
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// import { initializeApp, credential } from 'firebase-admin/app';
+import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC8e6fNs0JL31IHAu3jyipgjBRh82O2_oI",
-  authDomain: "dvdrobby-company-profile.firebaseapp.com",
-  projectId: "dvdrobby-company-profile",
-  storageBucket: "dvdrobby-company-profile.appspot.com",
-  messagingSenderId: "280005077451",
-  appId: "1:280005077451:web:1ca36bd8743ee9d363ee4e"
+  apiKey: "AIzaSyAuItE0bj4uYzuse2vk7aTYIHeKegppEEg",
+  authDomain: "dvdrobby-notes.firebaseapp.com",
+  databaseURL: "https://dvdrobby-notes-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "dvdrobby-notes",
+  storageBucket: "dvdrobby-notes.appspot.com",
+  messagingSenderId: "156348777408",
+  appId: "1:156348777408:web:4c7460485fa585c824fe25",
+  measurementId: "G-8J0KZQMGZ5"
 };
 
 // Initialize Firebase
-const firebase = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-export default firebase;
+export {app, auth};

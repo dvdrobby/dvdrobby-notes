@@ -1,16 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './containers/pages/App/index';
 import reportWebVitals from './reportWebVitals';
-import firebase from './config/firebase';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'; 
+import Dashboard from './containers/pages/Dashboard';
+import Register from './containers/pages/Register';
+import Login from './containers/pages/Login';
+import UserProvider from './utils/context/state';
 
-console.log(firebase);
+const router = createBrowserRouter(
+  [
+    {
+      path:"/",
+      element:<Dashboard/>,
+    },
+    {
+      path:"/register",
+      element:<Register/>
+    },
+    {
+      path:"/login",
+      element:<Login/>,
+    }
+  ]
+);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <RouterProvider router={router}/>
+    </UserProvider>
   </React.StrictMode>
 );
 
