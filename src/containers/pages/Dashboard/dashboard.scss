@@ -1,0 +1,100 @@
+
+.card-dashboard{
+    // position: absolute;
+    // top:100px;
+    margin-top: 100px;
+    background-color: aliceblue;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 600px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,.4);
+
+    .success{
+        color:green;
+    }
+
+    .failed{
+        color:red;
+    }
+
+   
+    .card-input{
+        border-radius: 6px;
+        margin-bottom: 10px;
+        padding: 10px;
+        width: 350px;
+        border: none;
+
+        &.text{
+            max-width: 350px;
+            height: 200px;
+        }
+    }
+
+    .btn{
+        background-color: cyan;
+        padding: 10px;
+        width: 350px;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: .3s;
+
+        &.disabled{
+            background-color: gray;
+            cursor: progress;
+            &:hover{
+                background-color: gray;
+            }
+        }
+
+        &:hover{
+            background-color: darkcyan;
+
+        }
+    }
+
+    
+}
+
+.card-list{
+    // position: absolute;
+    margin-top: 20px;
+    box-sizing: border-box;
+    background-color: aliceblue;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    width: 600px;
+    text-align: start;
+    padding:10px;
+    border-radius: 8px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,.4);
+
+    .card-notes-title{
+        margin: 0;
+        font-weight: 900;
+        font-size: x-large;
+        &:hover{
+            cursor: pointer;
+
+        }
+    }
+
+    .card-notes-date{
+        margin-top: 0;
+        font-size: x-small;
+    }
+    .card-notes-caption{
+        margin-top: 0;
+    }
+}
+
+.card-hr{
+    // position: absolute;
+}

@@ -25,6 +25,7 @@ const Register = () => {
 
         await registerAPI(data).then((res) => 
             {   
+                console.log(res.user)
                 userDispatch({type:"FETCH_REGISTER_SUCCESS", payload: res.user });
                 setPopUp({status: "Register Success"})
                 setData({email:"", password: "",})
@@ -35,7 +36,6 @@ const Register = () => {
                 })
             }
 
-        console.log(userState)
 
     const handleChange = (e)=>{
         setData({...data,
@@ -54,7 +54,11 @@ const Register = () => {
                 <form onSubmit={handleSubmit}>
                     <input ref={emailRef} onChange={handleChange} className="card-input" type="text" name="email" placeholder="email..." value={data.email}></input>
                     <input ref={passRef} onChange={handleChange} className="card-input" type="password" name="password" placeholder="password..." value={data.password}></input>
-                    <Button text="Register"/>   
+                    {userState.isLoading ? (
+                        <button className="btn disabled">Loading..</button>
+                    ): (
+                        <Button text="Register"/>   
+                    )}
                 </form>
                 
             </div>

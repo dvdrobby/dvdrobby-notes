@@ -1,17 +1,24 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./navbar.scss";
-import { useUserContext } from "../../../utils/context/state";
 
 const Navbar = () => {
 
-    const user = useUserContext();
-    const {userState} = user;
+    const user = JSON.parse(localStorage.getItem("user"))
+    const navigate = useNavigate()
+
+    const logout = () => {
+        localStorage.clear()
+        navigate('/login')
+    }
 
     return (
-        <div className="container">
-                { userState.isLoggedIn ? 
-                (<ul className="nav"><li className="nav-item">Hallo, {userState.user.email}</li></ul>)
+        <div >
+                { user && !null ? 
+                (<ul className="nav">
+                    <li className="nav-item">Hallo, {user.email}</li>
+                    <li className="nav-item"><button className="logout-btn" onClick={logout}>Logout</button></li>
+                </ul>)
                 :
                 (
                 <ul className="nav">

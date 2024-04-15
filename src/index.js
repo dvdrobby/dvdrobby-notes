@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'; 
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'; 
 import Dashboard from './containers/pages/Dashboard';
 import Register from './containers/pages/Register';
 import Login from './containers/pages/Login';
@@ -12,7 +12,7 @@ const router = createBrowserRouter(
   [
     {
       path:"/",
-      element:<Dashboard/>,
+      element: <Dashboard/>,
     },
     {
       path:"/register",

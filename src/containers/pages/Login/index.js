@@ -9,7 +9,6 @@ const Login = () => {
 
     const userContext = useUserContext();
     const {userState, userDispatch} = userContext;
-    const navigate = useNavigate();
 
     const [data, setData] = useState({
         email:"",
@@ -19,10 +18,11 @@ const Login = () => {
     const [popUp, setPopUp] = useState("");
 
     useEffect(()=>{
-        if(userState.isLoggedIn){
-            navigate("/");
+        if(localStorage.getItem("isLoggedIn")){
+            window.location.href="/";
         }
-    },[])
+    },[userState])
+
     const handleChange = (e)=>{
         setData({...data,
             [e.target.name] : e.target.value
@@ -32,12 +32,22 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         userDispatch({type:"FETCH_START"})
-
+        console.log(userState.isLoading)
         await loginAPI(data)
             .then( res => {
-                userDispatch({type:"FETCH_LOGIN_SUCCESS", payload: res.user });
+
+                const dataUser = {
+                    email: res.user.email,
+                    uid: res.user.uid
+                }
+
+                const dataStorage = JSON.stringify(dataUser)
+
+                userDispatch({type:"FETCH_LOGIN_SUCCESS", payload: dataUser });
                 setData({email:"", password: "",})
-                navigate("/");
+                localStorage.setItem("user", dataStorage)
+                localStorage.setItem("isLoggedIn", true)
+
             })
             .catch( (err) => {
                 userDispatch({type:"FETCH_FAILED"})
@@ -54,7 +64,11 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                 <input onChange={handleChange} className="card-input" type="text" name="email" placeholder="email..." value={data.email}></input>
                 <input onChange={handleChange} className="card-input" type="password" name="password" placeholder="password..." value={data.password}></input>
-                <Button text="Login" />
+                {userState.isLoading ? (
+                        <button className="btn disabled">Loading..</button>
+                    ): (
+                        <Button text="Login"/>   
+                    )}
                 </form>
             </div>
         </div>

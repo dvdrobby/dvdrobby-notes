@@ -14,11 +14,15 @@ code {
 }
 
 .container {
+  /* position: relative; */
+  padding:50px;
   display: flex;
+  flex-direction: column;
   margin: auto;
-  justify-content: center;
+  justify-content: start;
+  align-items: center;
   position: relative;
   max-width: 60%;
-  height: 100vh;
+  height:auto;
   background-color: white;
 }
