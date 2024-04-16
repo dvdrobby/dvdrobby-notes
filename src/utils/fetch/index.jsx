@@ -1,5 +1,5 @@
 import { database } from "../../config/firebase";
-import { ref, push, onValue, update, remove } from "firebase/database";
+import { ref, push, onValue, set, remove } from "firebase/database";
 
 const db = database
 
@@ -32,6 +32,18 @@ export const getNotes = async (dataId) =>{
             reject(false)
         })
     })
+}
+
+export const updateNotes = (data) => {
+    const urls =  ref(db, `notes/${data.userId}/${data.notesId}`)
+    return new Promise(( resolve ) => {
+        set(urls, {
+            title:data.title,
+            content: data.content,
+            date: data.date
+        });
+        resolve(true) 
+    } )
 }
 
 export const deleteNotes= (data)=>{

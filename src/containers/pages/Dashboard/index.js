@@ -4,7 +4,7 @@ import { useUserContext } from "../../../utils/context/state";
 import { useEffect, useState } from "react";
 import Button from "../../../components/moleculs/Button";
 import "./dashboard.scss";
-import { getNotes, postNotes, deleteNotes } from "../../../utils/fetch";
+import { getNotes, postNotes, deleteNotes, updateNotes } from "../../../utils/fetch";
 
 const Dashboard = () => {
     const user = useUserContext();
@@ -15,10 +15,8 @@ const Dashboard = () => {
     const dataStorage = JSON.parse(localStorage.getItem("user"))
 
     const [data, setData] = useState({
-        uid: "",
         title:"",
         content:"",
-        date:new Date().getTime()
     })
 
     useEffect(()=>{
@@ -26,9 +24,10 @@ const Dashboard = () => {
         if(!localStorage.getItem('isLoggedIn')){
             window.location.href="/login";
         }
-        generateNotes(dataStorage.uid);
         
-    },[notes])
+        console.log("render notes")
+        
+    },[])
 
    
     
@@ -43,7 +42,6 @@ const Dashboard = () => {
 
     const handleChange = (e)=>{
         setData({...data,
-            uid:dataStorage.uid,
             [e.target.name]:e.target.value
         })
     }
@@ -51,16 +49,22 @@ const Dashboard = () => {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         userDispatch({type:"FETCH_START"});
-
+        
         if(data.title.length > 0 && data.content.length > 0 )
         {
-            await postNotes(data).then(res => {
+            const dataPost = {
+                uid:dataStorage.uid,
+                title:data.title,
+                content:data.content,
+                date: new Date().getTime()
+            }
+            await postNotes(dataPost).then(res => {
 
                 if(res){
                     userDispatch({type:"FETCH_POST_SUCCESS"})
                     showPopUp("Notes added");
+                    generateNotes(dataStorage.uid);
                     return setData({
-                        ...data,
                         title:"",
                         content:"",
     
@@ -83,12 +87,42 @@ const Dashboard = () => {
         setPopUp(null)
     }
 
-    const handleUpdateNotes= (data)=>{
+    const handleUpdateNotes= (notes)=>{
+    
         setData({
-            ...data,
-            uid:data.id,
-            title:data.data.title,
-            content:data.data.content
+            notesId: notes.id,
+            title:notes.data.title,
+            content:notes.data.content,
+            button:"UPDATE"
+        })
+    }
+
+    const onUpdateNotes= async (e) => {
+        e.preventDefault();
+        userDispatch({type:"FETCH_START"});
+
+        const updateData = {
+            userId: dataStorage.uid,
+            notesId: data.notesId,
+            title: data.title,
+            content: data.content,
+            date: new Date().getTime()
+        }
+
+        await updateNotes(updateData).then(res => {
+            if(res){
+                userDispatch({type:"FETCH_POST_SUCCESS"})
+                showPopUp("Notes updated");
+                generateNotes(dataStorage.uid);
+                return setData({
+                    title:"",
+                    content:"",
+
+                })
+            }else{
+                userDispatch({type:"FETCH_POST_FAILED"})
+                return showPopUp("Update error");
+            }
         })
     }
 
@@ -102,6 +136,13 @@ const Dashboard = () => {
         }
     }
 
+    const onCancel = ()=>{
+        setData({
+            title:"",
+            content:""
+        })
+    }
+
     return (
             <div className="container">
                 <Navbar/>
@@ -110,14 +151,13 @@ const Dashboard = () => {
                     {
                         popUp && (<p className="success">{popUp.status}</p>)
                     }
-                    <form onSubmit={handleSubmit}>
-                        <input type="text" name="title" className="card-input" placeholder="add title here.." value={data.title} onChange={handleChange}/>
-                        <textarea type="text" name="content" className="card-input text" placeholder="add content here.." value={data.content} onChange={handleChange}/>
-                        {userState.isLoading ?
-                        (<button className="btn disabled">Loading..</button>)
-                        :
-                        (<Button text="Save"/>)}
-                    </form>
+            
+                    <input type="text" name="title" className="card-input" placeholder="add title here.." value={data.title} onChange={handleChange}/>
+                    <textarea type="text" name="content" className="card-input text" placeholder="add content here.." value={data.content} onChange={handleChange}/>
+                    { data.button === "UPDATE" ?
+                    (<div><Button text="Update" event={onUpdateNotes}/><Button text="Cancel" event={onCancel}/></div>)
+                    :
+                    (<Button text="Save" event={handleSubmit}/>)}
                 </div>
                 {
                     notes &&
