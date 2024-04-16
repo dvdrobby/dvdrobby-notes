@@ -68,10 +68,10 @@
     box-sizing: border-box;
     background-color: aliceblue;
     display: flex;
+    justify-content: start;
     align-items: start;
     flex-direction: column;
     width: 600px;
-    text-align: start;
     padding:10px;
     border-radius: 8px;
     box-shadow: 5px 5px 5px rgba(0,0,0,.4);
@@ -93,8 +93,14 @@
     .card-notes-caption{
         margin-top: 0;
     }
-}
-
-.card-hr{
-    // position: absolute;
+    .delete-notes{
+        background:rgb(241, 59, 59);
+        color: white;
+        border-radius: 6px;
+        padding:10px;
+        cursor:pointer;
+        border:none;
+        margin: 0;
+        justify-self:self-end;
+    }
 }

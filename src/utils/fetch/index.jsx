@@ -33,3 +33,8 @@ export const getNotes = async (dataId) =>{
         })
     })
 }
+
+export const deleteNotes= (data)=>{
+    const urls = ref(db, `notes/${data.userId}/${data.notesId}`);
+    return remove(urls)
+}

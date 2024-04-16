@@ -4,7 +4,7 @@ import { useUserContext } from "../../../utils/context/state";
 import { useEffect, useState } from "react";
 import Button from "../../../components/moleculs/Button";
 import "./dashboard.scss";
-import { getNotes, postNotes } from "../../../utils/fetch";
+import { getNotes, postNotes, deleteNotes } from "../../../utils/fetch";
 
 const Dashboard = () => {
     const user = useUserContext();
@@ -13,6 +13,13 @@ const Dashboard = () => {
 
 
     const dataStorage = JSON.parse(localStorage.getItem("user"))
+
+    const [data, setData] = useState({
+        uid: "",
+        title:"",
+        content:"",
+        date:new Date().getTime()
+    })
 
     useEffect(()=>{
         
@@ -23,18 +30,12 @@ const Dashboard = () => {
         
     },[notes])
 
-    const [data, setData] = useState({
-        uid: "",
-        title:"",
-        content:"",
-        date:new Date().getTime()
-    })
+   
     
     const [popUp, setPopUp]= useState(null);
 
     const generateNotes = async (dataId) => {
         const dataFetch = await getNotes(dataId).then(data=> data).catch(err => err);
-        console.log("fecth ",dataFetch)
         setNotes(dataFetch);
     }
 
@@ -71,8 +72,6 @@ const Dashboard = () => {
             return showPopUp("Title and Content must be filled");
 
         }
-        
-        
 
     }
 
@@ -82,6 +81,25 @@ const Dashboard = () => {
             setPopUp({status:status})
         },3000)
         setPopUp(null)
+    }
+
+    const handleUpdateNotes= (data)=>{
+        setData({
+            ...data,
+            uid:data.id,
+            title:data.data.title,
+            content:data.data.content
+        })
+    }
+
+    const handleDeleteNotes= (data)=>{
+        const dataNotes = {
+            userId:dataStorage.uid,
+            notesId: data,
+        }
+        if(window.confirm("Are you sure you want to delete")){
+            deleteNotes(dataNotes)
+        }
     }
 
     return (
@@ -112,9 +130,10 @@ const Dashboard = () => {
                                     const date = getDate.toDateString()
                                     return (
                                         <div className="card-list" key={note.id}>
-                                            <p className="card-notes-title"><b>{note.data.title}</b></p>                 
+                                            <p className="card-notes-title" onClick={() => handleUpdateNotes(note)}><b>{note.data.title}</b></p>                 
                                             <p className="card-notes-date">{date}</p>                 
-                                            <p className="card-notes-caption">{note.data.content}</p>                 
+                                            <p className="card-notes-caption">{note.data.content}</p>    
+                                            <button className="delete-notes" onClick={()=> handleDeleteNotes(note.id)}>delete notes</button>             
                                         </div>
                                     )
                                 })
