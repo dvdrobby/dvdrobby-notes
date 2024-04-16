@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'; 
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'; 
 import Dashboard from './containers/pages/Dashboard';
 import Register from './containers/pages/Register';
 import Login from './containers/pages/Login';

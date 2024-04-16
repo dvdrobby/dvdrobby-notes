@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./navbar.scss";
 
 const Navbar = () => {
 
@@ -16,15 +15,25 @@ const Navbar = () => {
         <div >
                 { user && !null ? 
                 (<ul className="nav">
-                    <li className="nav-item">Hallo, {user.email}</li>
-                    <li className="nav-item"><button className="logout-btn" onClick={logout}>Logout</button></li>
+                    <div className="logo">
+                        Notes App
+                    </div>
+                    <div className="nav-list">
+                        <li className="nav-item">Hallo, {user.email}</li>
+                        <li className="nav-item"><button className="logout-btn" onClick={logout}>Logout</button></li>
+                    </div>
                 </ul>)
                 :
                 (
                 <ul className="nav">
-                    <li className="nav-item"><Link to="/" >Home</Link></li>  
-                    <li className="nav-item"><Link to="/register">Register</Link></li>
-                    <li className="nav-item"><Link to="/login">Login</Link></li>
+                    <div className="logo">
+                        Notes App
+                    </div>
+                    <div className="nav-list">
+                        <li className="nav-item"><Link to="/" >Home</Link></li>  
+                        <li className="nav-item"><Link to="/register">Register</Link></li>
+                        <li className="nav-item"><Link to="/login">Login</Link></li>
+                    </div>
                 </ul>
                 )
             }

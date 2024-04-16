@@ -1,6 +1,4 @@
-import React, {useRef, useState, useEffect} from "react";
-import Button from "../../../components/moleculs/Button";
-import "./register.scss";
+import React, { useState } from "react";
 import Navbar from "../../organisms/Navbar/Navbar";
 import { registerAPI } from "../../../utils/auth";
 import { useUserContext } from "../../../utils/context/state";
@@ -13,11 +11,7 @@ const Register = () => {
         email:"",
         password:""
     });
-
     const [popUp, setPopUp] = useState("")
-
-    const emailRef = useRef();
-    const passRef = useRef();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,23 +40,28 @@ const Register = () => {
 
 
     return (
-        <div className="container">
+        <>
             <Navbar/>
             <div className="card">
-                <p className="card-title">Register here</p>
-                { userState.isSuccess ? (<p className="success">{popUp.status}</p>) : (<p className="failed">{popUp.status}</p>)}
                 <form onSubmit={handleSubmit}>
-                    <input ref={emailRef} onChange={handleChange} className="card-input" type="text" name="email" placeholder="email..." value={data.email}></input>
-                    <input ref={passRef} onChange={handleChange} className="card-input" type="password" name="password" placeholder="password..." value={data.password}></input>
-                    {userState.isLoading ? (
-                        <button className="btn disabled">Loading..</button>
-                    ): (
-                        <Button text="Register"/>   
-                    )}
+                    <h1>Don't have account?<br/><span>Please register</span></h1>
+                    { userState.isSuccess ? (<p className="popup">{popUp.status}</p>) : (<p className="popup">{popUp.status}</p>)}
+                    <div className="card-input">
+                        <input onChange={handleChange} type="text" name="email" placeholder="Email" value={data.email}/>
+                    </div>
+                    <div className="card-input">
+                        <input onChange={handleChange} type="password" name="password" placeholder="Password" value={data.password}/>
+                    </div>
+                    <div className="card-input">
+                        {userState.isLoading ? (
+                            <input type="submit" className="disabled" value="Loading..."/>
+                        ): (
+                            <input type="submit" value="Register"/>  
+                        )}
+                    </div>
                 </form>
-                
             </div>
-        </div>
+        </>
     )
 }
 

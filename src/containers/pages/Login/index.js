@@ -1,9 +1,8 @@
 import React, { useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import Button from "../../../components/moleculs/Button";
 import Navbar from "../../organisms/Navbar/Navbar";
 import { useUserContext } from "../../../utils/context/state";
 import { loginAPI } from "../../../utils/auth";
+
 
 const Login = () => {
 
@@ -32,7 +31,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         userDispatch({type:"FETCH_START"})
-        console.log(userState.isLoading)
+        
         await loginAPI(data)
             .then( res => {
 
@@ -56,22 +55,29 @@ const Login = () => {
             })
     }
     return (
-        <div className="container">
+        <>
             <Navbar/>
             <div className="card">
-                <p className="card-title">Login here</p>
-                { userState.isError ? (<p className="failed">{popUp.status}</p>) : ""}
                 <form onSubmit={handleSubmit}>
-                <input onChange={handleChange} className="card-input" type="text" name="email" placeholder="email..." value={data.email}></input>
-                <input onChange={handleChange} className="card-input" type="password" name="password" placeholder="password..." value={data.password}></input>
-                {userState.isLoading ? (
-                        <button className="btn disabled">Loading..</button>
-                    ): (
-                        <Button text="Login"/>   
-                    )}
+                    <h1>Hello!!<br/><span>Welcome to the Login page!</span></h1>
+                    { userState.isError ? (<p className="popup">{popUp.status}</p>) : ""}
+                    <div className="card-input">
+                        <input onChange={handleChange} type="text" name="email" placeholder="Email" value={data.email}/>
+                    </div>
+                    <div className="card-input">
+                        <input onChange={handleChange} type="password" name="password" placeholder="Password" value={data.password}/>
+                    </div>
+                    <div className="card-input">
+                    {userState.isLoading ? (
+                            <input type="submit" className="disabled" value="Loading..."/>
+                        ): (
+                            <input type="submit" value="Login"/>   
+                        )}
+                    </div>
                 </form>
             </div>
-        </div>
+            
+        </>
     )
 }
 
