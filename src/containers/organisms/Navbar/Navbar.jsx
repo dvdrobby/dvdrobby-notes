@@ -11,8 +11,37 @@ const Navbar = () => {
         navigate('/login')
     }
 
-    return (
-        <div >
+    if(window.location.pathname == "/login"){
+        return (
+            <div>
+                <ul className="nav">
+                    <div className="logo">
+                        Notes App
+                    </div>
+                    <div className="nav-list">
+                        <li className="nav-item"><Link to="/" >Home</Link></li>  
+                        <li className="nav-item"><Link to="/register">Register</Link></li>
+                </div>
+                </ul>
+            </div>
+                )
+    }else if(window.location.pathname == "/register"){
+        return (
+            <div>
+                <ul className="nav">
+                    <div className="logo">
+                        Notes App
+                    </div>
+                    <div className="nav-list">
+                        <li className="nav-item"><Link to="/" >Home</Link></li>  
+                        <li className="nav-item"><Link to="/login">Login</Link></li>
+                    </div>
+                </ul>
+            </div>
+        )
+    }else{
+        return (
+            <div>
                 { user && !null ? 
                 (<ul className="nav">
                     <div className="logo">
@@ -23,22 +52,11 @@ const Navbar = () => {
                         <li className="nav-item"><button className="logout-btn" onClick={logout}>Logout</button></li>
                     </div>
                 </ul>)
-                :
-                (
-                <ul className="nav">
-                    <div className="logo">
-                        Notes App
-                    </div>
-                    <div className="nav-list">
-                        <li className="nav-item"><Link to="/" >Home</Link></li>  
-                        <li className="nav-item"><Link to="/register">Register</Link></li>
-                        <li className="nav-item"><Link to="/login">Login</Link></li>
-                    </div>
-                </ul>
-                )
-            }
-        </div>
-    )
+                : null}
+            </div>
+        )
+    }
+
 }
 
 export default Navbar;

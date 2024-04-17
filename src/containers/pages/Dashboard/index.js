@@ -1,8 +1,8 @@
 import Navbar from "../../organisms/Navbar/Navbar";
 import { useUserContext } from "../../../utils/context/state";
 import { useEffect, useState } from "react";
-import Button from "../../../components/moleculs/Button";
 import { getNotes, postNotes, deleteNotes, updateNotes } from "../../../utils/fetch";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
     const user = useUserContext();
@@ -21,25 +21,16 @@ const Dashboard = () => {
 
     useEffect(()=>{
         
-        if(!localStorage.getItem('isLoggedIn')){
-            window.location.href="/login";
+        if(dataStorage){
+            generateNotes(dataStorage.uid)
         }
-
-        generateNotes(dataStorage.uid)
         
-        console.log("render notes")
-        
-    },[])
-
-   
-    
+    },[data])
 
     const generateNotes = async (dataId) => {
         const dataFetch = await getNotes(dataId).then(data=> data).catch(err => err);
         setNotes(dataFetch);
     }
-
-    
 
     const handleChange = (e)=>{
         setData({...data,
@@ -59,6 +50,7 @@ const Dashboard = () => {
                 content:data.content,
                 date: new Date().getTime()
             }
+            
             await postNotes(dataPost).then(res => {
 
                 if(res){
@@ -77,6 +69,7 @@ const Dashboard = () => {
             return showPopUp("Title and Content must be filled");
 
         }
+        generateNotes(dataStorage.uid);
 
     }
 
@@ -84,7 +77,7 @@ const Dashboard = () => {
     const showPopUp = (status)=>{
         setTimeout(()=>{
             setPopUp({status:status})
-        },3000)
+        },1000)
         setPopUp(null)
     }
 
@@ -100,7 +93,7 @@ const Dashboard = () => {
 
     const onUpdateNotes= async (e) => {
         e.preventDefault();
-        userDispatch({type:"FETCH_START"});
+        userDispatch({ type:"FETCH_START" });
 
         const updateData = {
             userId: dataStorage.uid,
@@ -145,51 +138,59 @@ const Dashboard = () => {
         })
     }
 
-    return (
-            <>
-                <Navbar/>
-                <div className="card-notes">
-                    <h1>Add Note</h1>
-                    {
-                        popUp && (<p className="popup">{popUp.status}</p>)
-                    }
-            
-                    <input type="text" name="title" className="card-input" placeholder="Title" value={data.title} onChange={handleChange}/>
-                    <textarea type="text" name="content" className="card-input text" placeholder="Note" value={data.content} onChange={handleChange}/>
-                    { data.button === "UPDATE" ?
-                    (<div><button onClick={onUpdateNotes}>Update</button><button  onClick={onCancel}>Cancel</button></div>)
-                    :
-                    (<button onClick={handleSubmit}>Save</button>)}
-                </div>
-                <section className="notes-container">
-                    {
-                        notes &&
-                        (
-                            <>
-                                {
-                                    notes.map((note)=>{
+    if(dataStorage){
+        
+        return (
+                <>
+                    <Navbar/>
+                    <div className="card-notes">
+                        <h1>Add Note</h1>
+                        {
+                            popUp && (<p className="popup">{popUp.status}</p>)
+                        }
+                
+                        <input type="text" name="title" className="card-input" placeholder="Title" value={data.title} onChange={handleChange}/>
+                        <textarea type="text" name="content" className="card-input text" placeholder="Note" value={data.content} onChange={handleChange}/>
+                        { data.button === "UPDATE" ?
+                        (<div><button onClick={onUpdateNotes}>Update</button><button  onClick={onCancel}>Cancel</button></div>)
+                        :
+                        (<button onClick={handleSubmit}>Save</button>)}
+                    </div>
+                    <section className="notes-container">
+                        {
+                            notes &&
+                            (
+                                <>
+                                    {
+                                        notes.map((note)=>{
+    
+                                            const getDate = new Date(note.data.date);
+                                            const date = getDate.toDateString()
+                                            return (
+                                                
+                                                    <div className="notes-list" key={note.id}>
+                                                        <h1 onClick={() => handleUpdateNotes(note)}><b>{note.data.title}</b></h1>                 
+                                                        <p className="card-notes-date">{date}</p>                 
+                                                        <p className="card-notes-caption">{note.data.content}</p>    
+                                                        <button className="delete-notes" onClick={()=> handleDeleteNotes(note.id)}>Delete Note</button>             
+                                                    </div>
+                                            )
+                                        })
+                                    }
+                                
+                                </>
+                            )
+                        }
+    
+                    </section>
+                </>
+        )
 
-                                        const getDate = new Date(note.data.date);
-                                        const date = getDate.toDateString()
-                                        return (
-                                            
-                                                <div className="notes-list" key={note.id}>
-                                                    <h1 onClick={() => handleUpdateNotes(note)}><b>{note.data.title}</b></h1>                 
-                                                    <p className="card-notes-date">{date}</p>                 
-                                                    <p className="card-notes-caption">{note.data.content}</p>    
-                                                    <button className="delete-notes" onClick={()=> handleDeleteNotes(note.id)}>Delete Note</button>             
-                                                </div>
-                                        )
-                                    })
-                                }
-                            
-                            </>
-                        )
-                    }
+    }else{
+        return <Navigate to="/login"/>
+    }
+    
 
-                </section>
-            </>
-    )
 }
 
 export default Dashboard;
