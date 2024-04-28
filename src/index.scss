@@ -381,6 +381,11 @@
             display: block;
             visibility: visible;
             opacity: 1;
+
+            &:hover{
+              box-shadow: none;
+              font-size: x-large;
+            }
           }
 
           .show-bar{
