@@ -17,15 +17,43 @@ const Dashboard = () => {
         content:"",
     })
 
-    const [popUp, setPopUp]= useState(null);
+    const [popUp, setPopUp]= useState("");
+    const [notif, setNotif]= useState(false);
 
     useEffect(()=>{
         
         if(dataStorage){
             generateNotes(dataStorage.uid)
         }
+
+        if(notif==="post_success"){
+            setPopUp("Notes Added")
+            setTimeout(()=>{
+                setPopUp("")
+                setNotif(false)
+            }, 2000)
+        }else if(notif==="update_success"){
+            setPopUp("Update notes success")
+            setTimeout(()=>{
+                setPopUp("")
+                setNotif(false)
+            }, 2000)
+        }else if(notif==="update_failed"){
+            setPopUp("Something error")
+            setTimeout(()=>{
+                setPopUp("")
+                setNotif(false)
+            }, 2000)
+        }else if(notif==="required"){
+            setPopUp("Input required")
+            setTimeout(()=>{
+                setPopUp("")
+                setNotif(false)
+            }, 2000)
+        }
+
         
-    },[data])
+    },[data, popUp])
 
     const generateNotes = async (dataId) => {
         const dataFetch = await getNotes(dataId).then(data=> data).catch(err => err);
@@ -55,7 +83,7 @@ const Dashboard = () => {
 
                 if(res){
                     userDispatch({type:"FETCH_POST_SUCCESS"})
-                    showPopUp("Notes added");
+                    setNotif("post_success")
                     generateNotes(dataStorage.uid);
                     return setData({
                         title:"",
@@ -66,19 +94,10 @@ const Dashboard = () => {
             })
         }else{
             userDispatch({type:"FETCH_POST_FAILED"})
-            return showPopUp("Title and Content must be filled");
-
+            setNotif("required")
         }
         generateNotes(dataStorage.uid);
 
-    }
-
-
-    const showPopUp = (status)=>{
-        setTimeout(()=>{
-            setPopUp({status:status})
-        },1000)
-        setPopUp(null)
     }
 
     const handleUpdateNotes= (notes)=>{
@@ -106,8 +125,8 @@ const Dashboard = () => {
         await updateNotes(updateData).then(res => {
             if(res){
                 userDispatch({type:"FETCH_POST_SUCCESS"})
-                showPopUp("Notes updated");
-                generateNotes(dataStorage.uid);
+                setNotif("update_success")
+                generateNotes(dataStorage.uid)
                 return setData({
                     title:"",
                     content:"",
@@ -115,7 +134,7 @@ const Dashboard = () => {
                 })
             }else{
                 userDispatch({type:"FETCH_POST_FAILED"})
-                return showPopUp("Update error");
+                setNotif("update_failed")
             }
         })
     }
@@ -145,10 +164,7 @@ const Dashboard = () => {
                     <Navbar/>
                     <div className="card-notes">
                         <h1>Add Note</h1>
-                        {
-                            popUp && (<p className="popup">{popUp.status}</p>)
-                        }
-                
+                        <p className="popup">{popUp}</p>                
                         <input type="text" name="title" className="card-input" placeholder="Title" value={data.title} onChange={handleChange}/>
                         <textarea type="text" name="content" className="card-input text" placeholder="Note" value={data.content} onChange={handleChange}/>
                         { data.button === "UPDATE" ?

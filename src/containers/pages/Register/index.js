@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../organisms/Navbar/Navbar";
 import { registerAPI } from "../../../utils/auth";
 import { useUserContext } from "../../../utils/context/state";
@@ -12,6 +12,7 @@ const Register = () => {
         password:""
     });
     const [popUp, setPopUp] = useState("")
+    const [notif, setNotif] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,15 +22,33 @@ const Register = () => {
             {   
                 console.log(res.user)
                 userDispatch({type:"FETCH_REGISTER_SUCCESS", payload: res.user });
-                setPopUp({status: "Register Success"})
+                setNotif("success")
                 setData({email:"", password: "",})
             })
             .catch(() =>{
                  userDispatch({type:"FETCH_FAILED"})
-                 setPopUp({status: "Register Failed"})
+                 setNotif("failed")
                 })
-            }
-
+    }
+            
+    useEffect(()=>{
+        if(notif==='success'){
+            setPopUp("Register Success")
+            setTimeout(()=>{
+                setPopUp("")
+                setNotif(false)
+            },2000)
+        }else if(notif==="failed"){
+            setPopUp("Register Failed")
+            setTimeout(()=>{
+                setPopUp("")
+                setNotif(false)
+            },2000)
+        }else{
+            setPopUp("")
+            setNotif(false)
+        }
+    },[popUp, userState.isLoading])
 
     const handleChange = (e)=>{
         setData({...data,
@@ -45,7 +64,7 @@ const Register = () => {
             <div className="card">
                 <form onSubmit={handleSubmit}>
                     <h1>Don't have account?<br/><span>Please register</span></h1>
-                    { userState.isSuccess ? (<p className="popup">{popUp.status}</p>) : (<p className="popup">{popUp.status}</p>)}
+                    <p className="popup">{popUp}</p>
                     <div className="card-input">
                         <input onChange={handleChange} type="text" name="email" placeholder="Email" value={data.email}/>
                     </div>

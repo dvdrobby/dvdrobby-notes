@@ -14,13 +14,21 @@ const Login = () => {
         password: "",
     })
 
-    const [popUp, setPopUp] = useState("");
+    const [popUp, setPopUp] = useState(null);
+    const [notif, setNotif] = useState(false);
 
     useEffect(()=>{
         if(localStorage.getItem("isLoggedIn")){
             window.location.href="/";
         }
-    },[userState])
+        if(notif){
+            setPopUp("Login Failed")
+            setTimeout(()=>{
+                setPopUp(null)
+                setNotif(false)
+            },2000)
+        }
+    },[popUp, userState.isLoading])
 
     const handleChange = (e)=>{
         setData({...data,
@@ -50,7 +58,7 @@ const Login = () => {
             })
             .catch( (err) => {
                 userDispatch({type:"FETCH_FAILED"})
-                setPopUp({status:"Login Failed"})
+                setNotif(true)
                 console.log(err.message)
             })
     }
@@ -60,7 +68,7 @@ const Login = () => {
             <div className="card">
                 <form onSubmit={handleSubmit}>
                     <h1>Hello!!<br/><span>Welcome to the Login page!</span></h1>
-                    { userState.isError ? (<p className="popup">{popUp.status}</p>) : ""}
+                    <p className="popup">{popUp}</p>
                     <div className="card-input">
                         <input onChange={handleChange} type="text" name="email" placeholder="Email" value={data.email}/>
                     </div>

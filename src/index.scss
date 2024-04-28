@@ -5,7 +5,7 @@
   padding:0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  
+
   body{
     display: flex;
     justify-content: center;
@@ -50,7 +50,7 @@
           justify-content: end;
           align-items: center;
   
-          .nav-item .logout-btn{
+          .nav-item .logout-btn, .nav-item .btn{
             border: none;
             outline: none;
             background: transparent;
@@ -63,6 +63,12 @@
             &:hover{
               box-shadow: inset 15px 15px 20px rgba(0,0,0,0.1),inset -15px -15px 20px #fff ;
             }
+          }
+
+          .nav-item .btn{
+            display: none;
+            visibility: hidden;
+            opacity: 0;
           }
   
           .nav-item a{
@@ -79,6 +85,24 @@
             }
           }
   
+        }
+
+        .bar{
+          border: none;
+          outline: none;
+          background: transparent;
+          border-radius: 10px;
+          font-size: 1em;
+          cursor: pointer;
+          transition: all ease 0.3s;
+          padding: 15px 20px;
+          display: none;
+          visibility: hidden;
+          opacity: 0;
+
+          &:hover{
+            box-shadow: inset 15px 15px 20px rgba(0,0,0,0.1),inset -15px -15px 20px #fff ;
+          }
         }
       }
       
@@ -291,6 +315,82 @@
     }
 
   }
+
+  @media only screen and (max-width: 1024px ){ 
+  
+    body{
+      div#root{
+        .nav{
+    
+          .nav-list{
+            position: fixed;
+            top: 0;
+            right:0;
+            height: 100%;
+            display: flex;
+            margin-right: 0;
+            gap:10px;
+            padding-top: 50px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(9px);
+            transition: 0.5s;
+            transform: translateX(100vw);
+
+            .nav-item{
+              margin: 30px 150px;
+
+              a{
+                
+                &:hover{
+                  box-shadow: none;
+                  font-size: x-large;
+                }
+              }
+            }
+            
+            .nav-item .logout-btn{
+             
+              &:hover{
+                box-shadow: none;
+                font-size: x-large;
+              }
+            }
+            
+    
+            .nav-item .btn{
+              display: block;
+              position: absolute;
+              top:0;
+              right: 10px;
+              visibility: visible;
+              opacity: 1;
+
+              &:hover{
+                font-size: x-large;
+              }
+            }
+            
+    
+          }
+
+          .bar{
+            display: block;
+            visibility: visible;
+            opacity: 1;
+          }
+
+          .show-bar{
+            transform: translateX(0);
+          }
+        }
+
+
+      }
+    
+    }
+    
+  }
 }
-
-
